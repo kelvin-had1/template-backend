@@ -1,9 +1,18 @@
 import { User } from '@modules/User/entities/User';
+import 'reflect-metadata';
+import { CreateUserService } from '@modules/User/services/CreateUser.service';
 
-test('Create User', () => {
-    const user = new User();
+const createUserService = new CreateUserService();
 
-    user.name = "Root User";
+test('Create User', async () => {
 
-    expect(user.name).toEqual('Root User');
+    const user = await createUserService.execute({
+        name: 'John Doe',
+        email: '',
+        password: '',
+    });
+    const correctUser = new User();
+    correctUser.name = 'John Doe';
+
+    expect(user.name).toEqual(correctUser.name);
 })

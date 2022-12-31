@@ -16,7 +16,8 @@ module.exports = {
           '@modules': './src/modules',
           '@shared': './src/shared'          
         }
-      }]
+      }],
+      'babel-plugin-transform-typescript-metadata',
     ],
     ignore: [
       '**/*.spec.ts'
