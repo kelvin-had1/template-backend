@@ -6,35 +6,39 @@ on:
   pull_request:
     branches: [ "master" ]
 
-env:
-  registry: my_registry_name
-  DB_HOST: localhost
-  DB_USERNAME: postgres
-  DB_PASSWORD: postgres
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-  services:
-    postgres:
-      image: postgres:latest
-      env:
-        POSTGRES_DB: postgres        
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-      ports:
-        - 5432:5432
-      # Set health checks to wait until postgres has started
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
 
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
+        database-name:
+        - public
+        database-password:
+        - 1234
+        database-user:
+        - postgres
+        database-host:
+        - 127.0.0.1
+        database-port:
+        - 5432
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ${{ matrix.database-name }}
+          POSTGRES_USER: ${{ matrix.database-user }}
+          POSTGRES_PASSWORD: ${{ matrix.database-password }}
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v3
