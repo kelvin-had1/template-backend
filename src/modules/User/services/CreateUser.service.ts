@@ -1,16 +1,20 @@
+import { plainToInstance } from "class-transformer";
+import { inject, injectable } from "tsyringe";
 import { ICreateUserDTO } from "../dto/UserRepository";
 import { User } from "../entities/User";
-import { UserRepository } from "../repositories/UserRepository";
+import { IUserRepository } from "../repositories/UserRepository.interface";
 
-class CreateUserService extends UserRepository{
-    constructor() {
-        super();
-    }
+@injectable()
+class CreateUserService {
+    constructor(
+        @inject('UserRepository')
+        private userRepository: IUserRepository,
+    ) {}
 
     async execute(data: ICreateUserDTO): Promise<User> {
-        const user = await this.create(data);
+        const user = await this.userRepository.create(data);
 
-        return user;
+        return plainToInstance(User, user);
 
     }
 }
