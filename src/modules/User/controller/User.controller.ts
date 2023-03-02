@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { CreateUserService } from '../services/CreateUser.service';
 
-class UserController{
+class UserController {
   async create(request: Request, response: Response): Promise<Response> {
     const { name, email, password } = request.body;
 
